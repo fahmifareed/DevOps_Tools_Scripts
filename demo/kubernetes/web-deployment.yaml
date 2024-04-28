@@ -1,0 +1,33 @@
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: web-deployment
+spec:
+  replicas: 2
+  template:
+    metadata:
+      name: web
+      labels:
+        app: web
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: web
+          image: 172.16.120.153/test/web:v1.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          env:
+            - name: "MY_REDIS_HOST"
+              value: "redis"
+            - name: "MY_REDIS_PORT"
+              value: "6379"
+            - name: "MY_DATASOURCE_URL"
+              value: "jdbc:mariadb://mysql:3306/test?characterEncoding=utf-8"
+            - name: "MY_DATASOURCE_USERNAME"
+              value: "root"
+            - name: "MY_DATASOURCE_PASSWORD"
+              value: "123456"
+      imagePullSecrets:
+        - name: regsecret
+
